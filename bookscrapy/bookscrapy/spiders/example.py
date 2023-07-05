@@ -1,6 +1,5 @@
 import scrapy
-import re
-
+from pymongo import MongoClient
 
 class ExampleSpider(scrapy.Spider):
     name = "example"
@@ -36,3 +35,12 @@ class ExampleSpider(scrapy.Spider):
         next_page = response.css('.pagination .next::attr(href)').get()
         if next_page:
             yield response.follow(next_page, self.parse)
+
+    def closed(self, reason):
+        client = MongoClient('mongodb://localhost:27017')
+        db = client['smartmaple']
+        collection = db['kitapyurdu']
+        # MongoDB'ye kaydedilen verileri alın
+        data = list(collection.find())
+        print(data)
+        client.close()

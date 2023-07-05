@@ -41,7 +41,14 @@ ROBOTSTXT_OBEY = True
 #    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 #    "Accept-Language": "en",
 #}
+BOT_NAME = "bookscrapy"
 
+SPIDER_MODULES = ["bookscrapy.spiders"]
+NEWSPIDER_MODULE = "bookscrapy.spiders"
+ROBOTSTXT_OBEY = True
+ITEM_PIPELINES = {
+    'bookscrapy.pipelines.BookscrapyPipeline': 300,
+}
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {

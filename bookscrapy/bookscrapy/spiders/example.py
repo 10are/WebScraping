@@ -40,7 +40,7 @@ class ExampleSpider(scrapy.Spider):
         client = MongoClient('mongodb://localhost:27017')
         db = client['smartmaple']
         collection = db['kitapyurdu']
-        # MongoDB'ye kaydedilen verileri alın
+
         data = list(collection.find())
         print(data)
         client.close()

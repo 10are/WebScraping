@@ -1,5 +1,5 @@
 import scrapy
-import time
+from pymongo import MongoClient
 
 class KitapsepetiSpider(scrapy.Spider):
     name = "kitapsepeti"
@@ -18,7 +18,7 @@ class KitapsepetiSpider(scrapy.Spider):
             },
         },
         'FEED_EXPORT_ENCODING': 'utf-8',
-        'DOWNLOAD_DELAY': 1,  # İstekler arasında 1 saniye bekleme süresi
+        'DOWNLOAD_DELAY': 5,  
     }
 
     def parse(self, response):
@@ -37,20 +37,19 @@ class KitapsepetiSpider(scrapy.Spider):
                 'price': price.strip() if price else ""
             }
 
-        next_page = response.css('.pagination a.next::attr(href)').get()
+        next_page = response.css('//div[@class="productPager"]/a[@title="İleri"]/@href').get()
         if next_page:
             yield response.follow(next_page, self.parse)
+ 
 
-    def start_requests(self):
-        yield scrapy.Request(self.start_urls[0], callback=self.parse)
+    def closed(self, reason):
+        client = MongoClient('mongodb://localhost:27017')
+        db = client['smartmaple']
+        collection = db['kitapsepeti']
 
-    def _crawl(self, *args, **kwargs):
-        while True:
-            self.crawler.engine.schedule(
-                scrapy.Request(self.start_urls[0], callback=self.parse),
-                self
-            )
-            time.sleep(60)
+        data = list(collection.find())
+        print(data)
+        client.close()
 
-    def spider_idle(self):
-        self._crawl()
+
+

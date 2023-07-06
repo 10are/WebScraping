@@ -64,4 +64,4 @@ Veriler, MongoDB veritabanına kaydedilir. Bağlantı ayarları aşağıdaki gib
 - scrapy crawl example
 
 
-![mongodb](https://github.com/10are/WebScraping/assets/108812692/f005c285-2157-4c80-83c2-1056f27e761e)
+![mongodb](images/mongodb.png)
